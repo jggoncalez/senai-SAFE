@@ -9,6 +9,8 @@ class RegistroGate extends Model
 {
     use HasFactory;
 
+    protected $table = 'registros_gate';
+
     protected $fillable = [
         'autorizacao_id', 'user_id',
         'tipo', 'registrado_at', 'observacao',

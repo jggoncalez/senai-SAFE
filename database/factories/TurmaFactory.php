@@ -18,7 +18,9 @@ class TurmaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nome'      => 'Turma ' . $this->faker->bothify('??-##'),
+            'periodo'   => $this->faker->randomElement(['manha', 'tarde', 'noite']),
+            'ano_letivo' => $this->faker->year() . '/' . ($this->faker->year() + 1),
         ];
     }
 }

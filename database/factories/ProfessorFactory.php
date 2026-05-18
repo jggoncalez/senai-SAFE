@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Professor;
+use App\Models\Turma;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +20,10 @@ class ProfessorFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id'   => User::factory(),
+            'turma_id'  => Turma::factory(),
+            'nome'      => $this->faker->name(),
+            'matricula' => $this->faker->unique()->numerify('PROF-####'),
         ];
     }
 }

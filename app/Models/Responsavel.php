@@ -9,6 +9,8 @@ class Responsavel extends Model
 {
     use HasFactory;
 
+    protected $table = 'responsaveis';
+
     protected $fillable = [
         'aluno_id', 'nome', 'email',
         'telefone', 'telegram_chat_id', 'parentesco',

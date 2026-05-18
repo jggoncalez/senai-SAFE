@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Notificacao;
+use App\Models\RegistroGate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,10 @@ class NotificacaoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'registro_id' => RegistroGate::factory(),
+            'canal'       => $this->faker->randomElement(['mail', 'telegram']),
+            'status'      => $this->faker->randomElement(['pendente', 'enviado', 'falhou']),
+            'enviado_at'  => $this->faker->optional()->dateTimeThisMonth(),
         ];
     }
 }

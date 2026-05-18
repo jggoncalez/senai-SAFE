@@ -9,6 +9,8 @@ class Professor extends Model
 {
     use HasFactory;
 
+    protected $table = 'professores';
+
     protected $fillable = ['user_id', 'turma_id', 'nome', 'matricula'];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo

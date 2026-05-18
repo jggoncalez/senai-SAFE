@@ -5,6 +5,11 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Aluno;
+use App\Models\Professor;
+use App\Models\Responsavel;
+use App\Models\Turma;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,14 +20,39 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-        $this->call([
-            RoleSeeder::class,
+        $this->call(RoleSeeder::class);
+
+        $turmas = Turma::factory(6)->create();
+
+        $alunos = $turmas->flatMap(function ($turma) {
+            return Aluno::factory(10)
+                ->create(['turma_id' => $turma->id]);
+        });
+
+        $alunos->each(function ($aluno) {
+            Responsavel::factory(2)
+                ->create(['aluno_id' => $aluno->id]);
+        });
+
+        $turmas->each(function ($turma) {
+            $user = User::factory()->create();
+            $user->assignRole('professor');
+            Professor::factory()->create([
+                'user_id'  => $user->id,
+                'turma_id' => $turma->id,
+            ]);
+        });
+
+        $admin = User::factory()->create([
+            'name'  => 'Admin SAFE',
+            'email' => 'admin@safe.dev',
         ]);
-        
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $admin->assignRole('admin');
+
+        $portaria = User::factory()->create([
+            'name'  => 'Portaria SAFE',
+            'email' => 'portaria@safe.dev',
         ]);
+        $portaria->assignRole('portaria');
     }
 }

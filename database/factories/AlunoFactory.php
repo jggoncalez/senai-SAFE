@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Aluno;
+use App\Models\Turma;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,10 @@ class AlunoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'turma_id'  => Turma::factory(),
+            'nome'      => $this->faker->name(),
+            'matricula' => $this->faker->unique()->numerify('ALU-#####'),
+            'foto_url'  => null,
         ];
     }
 }

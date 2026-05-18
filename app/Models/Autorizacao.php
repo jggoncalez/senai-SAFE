@@ -9,6 +9,8 @@ class Autorizacao extends Model
 {
     use HasFactory;
 
+    protected $table = 'autorizacoes';
+
     protected $fillable = [
         'aluno_id', 'responsavel_id', 'tipo',
         'status', 'validade', 'observacao',
