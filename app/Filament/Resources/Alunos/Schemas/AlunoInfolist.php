@@ -11,17 +11,22 @@ class AlunoInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('turma.id')
+                TextEntry::make('turma.nome')
                     ->label('Turma'),
-                TextEntry::make('nome'),
-                TextEntry::make('matricula'),
+                TextEntry::make('nome')
+                    ->label('Nome'),
+                TextEntry::make('matricula')
+                    ->label('Matrícula'),
                 TextEntry::make('foto_url')
+                    ->label('Foto (URL)')
                     ->placeholder('-'),
                 TextEntry::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
             ]);
     }

@@ -12,16 +12,20 @@ class ProfessorInfolist
         return $schema
             ->components([
                 TextEntry::make('user.name')
-                    ->label('User'),
-                TextEntry::make('turma.id')
+                    ->label('Usuário'),
+                TextEntry::make('turma.nome')
                     ->label('Turma'),
-                TextEntry::make('nome'),
-                TextEntry::make('matricula'),
+                TextEntry::make('nome')
+                    ->label('Nome'),
+                TextEntry::make('matricula')
+                    ->label('Matrícula'),
                 TextEntry::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
             ]);
     }

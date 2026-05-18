@@ -16,17 +16,24 @@ class TurmasTable
         return $table
             ->columns([
                 TextColumn::make('nome')
-                    ->searchable(),
+                    ->label('Nome')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('periodo')
+                    ->label('Período')
                     ->searchable(),
                 TextColumn::make('ano_letivo')
-                    ->searchable(),
+                    ->label('Ano Letivo')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

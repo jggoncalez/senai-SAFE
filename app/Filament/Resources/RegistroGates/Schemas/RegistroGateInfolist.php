@@ -12,20 +12,31 @@ class RegistroGateInfolist
         return $schema
             ->components([
                 TextEntry::make('autorizacao.id')
-                    ->label('Autorizacao'),
+                    ->label('Autorização'),
                 TextEntry::make('user.name')
-                    ->label('User'),
-                TextEntry::make('tipo'),
+                    ->label('Registrado por'),
+                TextEntry::make('tipo')
+                    ->label('Tipo')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'entrada' => 'success',
+                        'saida'   => 'danger',
+                        default   => 'gray',
+                    }),
                 TextEntry::make('registrado_at')
-                    ->dateTime(),
+                    ->label('Registrado em')
+                    ->dateTime('d/m/Y H:i'),
                 TextEntry::make('observacao')
+                    ->label('Observação')
                     ->placeholder('-')
                     ->columnSpanFull(),
                 TextEntry::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
             ]);
     }

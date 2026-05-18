@@ -13,15 +13,25 @@ class ProfessorForm
         return $schema
             ->components([
                 Select::make('user_id')
+                    ->label('Usuário')
                     ->relationship('user', 'name')
+                    ->searchable()
+                    ->preload()
                     ->required(),
                 Select::make('turma_id')
-                    ->relationship('turma', 'id')
+                    ->label('Turma')
+                    ->relationship('turma', 'nome')
+                    ->searchable()
+                    ->preload()
                     ->required(),
                 TextInput::make('nome')
-                    ->required(),
+                    ->label('Nome')
+                    ->required()
+                    ->maxLength(255),
                 TextInput::make('matricula')
-                    ->required(),
+                    ->label('Matrícula')
+                    ->required()
+                    ->maxLength(50),
             ]);
     }
 }

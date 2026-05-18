@@ -20,9 +20,15 @@ class ProfessorResource extends Resource
 {
     protected static ?string $model = Professor::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
 
-    protected static ?string $recordTitleAttribute = 'Professor';
+    protected static ?string $navigationLabel = 'Professores';
+
+    protected static ?string $modelLabel = 'Professor';
+
+    protected static ?string $pluralModelLabel = 'Professores';
+
+    protected static ?string $recordTitleAttribute = 'nome';
 
     public static function form(Schema $schema): Schema
     {

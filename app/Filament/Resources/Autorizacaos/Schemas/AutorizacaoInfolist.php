@@ -11,22 +11,34 @@ class AutorizacaoInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('aluno.id')
+                TextEntry::make('aluno.nome')
                     ->label('Aluno'),
-                TextEntry::make('responsavel.id')
-                    ->label('Responsavel'),
-                TextEntry::make('tipo'),
-                TextEntry::make('status'),
+                TextEntry::make('responsavel.nome')
+                    ->label('Responsável'),
+                TextEntry::make('tipo')
+                    ->label('Tipo'),
+                TextEntry::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'aprovado'  => 'success',
+                        'reprovado' => 'danger',
+                        default     => 'warning',
+                    }),
                 TextEntry::make('validade')
-                    ->dateTime(),
+                    ->label('Validade')
+                    ->dateTime('d/m/Y H:i'),
                 TextEntry::make('observacao')
+                    ->label('Observação')
                     ->placeholder('-')
                     ->columnSpanFull(),
                 TextEntry::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
             ]);
     }

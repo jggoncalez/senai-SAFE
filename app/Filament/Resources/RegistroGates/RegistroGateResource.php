@@ -20,9 +20,15 @@ class RegistroGateResource extends Resource
 {
     protected static ?string $model = RegistroGate::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowRightOnRectangle;
 
-    protected static ?string $recordTitleAttribute = 'RegistroGate';
+    protected static ?string $navigationLabel = 'Registros de Acesso';
+
+    protected static ?string $modelLabel = 'Registro de Acesso';
+
+    protected static ?string $pluralModelLabel = 'Registros de Acesso';
+
+    protected static ?string $recordTitleAttribute = 'tipo';
 
     public static function form(Schema $schema): Schema
     {

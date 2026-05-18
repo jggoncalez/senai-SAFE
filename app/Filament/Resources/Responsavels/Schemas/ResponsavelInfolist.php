@@ -11,21 +11,27 @@ class ResponsavelInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('aluno.id')
+                TextEntry::make('aluno.nome')
                     ->label('Aluno'),
-                TextEntry::make('nome'),
+                TextEntry::make('nome')
+                    ->label('Nome'),
                 TextEntry::make('email')
-                    ->label('Email address'),
+                    ->label('E-mail'),
                 TextEntry::make('telefone')
+                    ->label('Telefone')
                     ->placeholder('-'),
                 TextEntry::make('telegram_chat_id')
+                    ->label('Chat ID do Telegram')
                     ->placeholder('-'),
-                TextEntry::make('parentesco'),
+                TextEntry::make('parentesco')
+                    ->label('Parentesco'),
                 TextEntry::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
             ]);
     }

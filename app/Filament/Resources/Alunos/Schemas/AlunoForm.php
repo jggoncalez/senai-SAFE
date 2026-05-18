@@ -13,14 +13,23 @@ class AlunoForm
         return $schema
             ->components([
                 Select::make('turma_id')
-                    ->relationship('turma', 'id')
+                    ->label('Turma')
+                    ->relationship('turma', 'nome')
+                    ->searchable()
+                    ->preload()
                     ->required(),
                 TextInput::make('nome')
-                    ->required(),
+                    ->label('Nome')
+                    ->required()
+                    ->maxLength(255),
                 TextInput::make('matricula')
-                    ->required(),
+                    ->label('Matrícula')
+                    ->required()
+                    ->maxLength(50),
                 TextInput::make('foto_url')
-                    ->url(),
+                    ->label('Foto (URL)')
+                    ->url()
+                    ->maxLength(2048),
             ]);
     }
 }

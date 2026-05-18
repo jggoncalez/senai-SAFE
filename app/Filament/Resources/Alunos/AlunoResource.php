@@ -20,9 +20,15 @@ class AlunoResource extends Resource
 {
     protected static ?string $model = Aluno::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
-    protected static ?string $recordTitleAttribute = 'Aluno';
+    protected static ?string $navigationLabel = 'Alunos';
+
+    protected static ?string $modelLabel = 'Aluno';
+
+    protected static ?string $pluralModelLabel = 'Alunos';
+
+    protected static ?string $recordTitleAttribute = 'nome';
 
     public static function form(Schema $schema): Schema
     {

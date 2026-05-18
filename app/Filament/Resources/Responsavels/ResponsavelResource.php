@@ -20,9 +20,15 @@ class ResponsavelResource extends Resource
 {
     protected static ?string $model = Responsavel::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedIdentification;
 
-    protected static ?string $recordTitleAttribute = 'Responsavel';
+    protected static ?string $navigationLabel = 'Responsáveis';
+
+    protected static ?string $modelLabel = 'Responsável';
+
+    protected static ?string $pluralModelLabel = 'Responsáveis';
+
+    protected static ?string $recordTitleAttribute = 'nome';
 
     public static function form(Schema $schema): Schema
     {

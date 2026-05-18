@@ -13,20 +13,31 @@ class ResponsavelForm
         return $schema
             ->components([
                 Select::make('aluno_id')
-                    ->relationship('aluno', 'id')
+                    ->label('Aluno')
+                    ->relationship('aluno', 'nome')
+                    ->searchable()
+                    ->preload()
                     ->required(),
                 TextInput::make('nome')
-                    ->required(),
+                    ->label('Nome')
+                    ->required()
+                    ->maxLength(255),
                 TextInput::make('email')
-                    ->label('Email address')
+                    ->label('E-mail')
                     ->email()
-                    ->required(),
+                    ->required()
+                    ->maxLength(255),
                 TextInput::make('telefone')
-                    ->tel(),
+                    ->label('Telefone')
+                    ->tel()
+                    ->maxLength(20),
                 TextInput::make('telegram_chat_id')
-                    ->tel(),
+                    ->label('Chat ID do Telegram')
+                    ->maxLength(50),
                 TextInput::make('parentesco')
-                    ->required(),
+                    ->label('Parentesco')
+                    ->required()
+                    ->maxLength(100),
             ]);
     }
 }

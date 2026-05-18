@@ -12,11 +12,19 @@ class TurmaForm
         return $schema
             ->components([
                 TextInput::make('nome')
-                    ->required(),
+                    ->label('Nome')
+                    ->required()
+                    ->maxLength(100),
                 TextInput::make('periodo')
-                    ->required(),
+                    ->label('Período')
+                    ->required()
+                    ->maxLength(50),
                 TextInput::make('ano_letivo')
-                    ->required(),
+                    ->label('Ano Letivo')
+                    ->required()
+                    ->numeric()
+                    ->minValue(2000)
+                    ->maxValue(2099),
             ]);
     }
 }

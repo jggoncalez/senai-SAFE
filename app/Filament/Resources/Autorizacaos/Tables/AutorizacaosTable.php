@@ -15,23 +15,37 @@ class AutorizacaosTable
     {
         return $table
             ->columns([
-                TextColumn::make('aluno.id')
-                    ->searchable(),
-                TextColumn::make('responsavel.id')
-                    ->searchable(),
+                TextColumn::make('aluno.nome')
+                    ->label('Aluno')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('responsavel.nome')
+                    ->label('Responsável')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('tipo')
+                    ->label('Tipo')
                     ->searchable(),
                 TextColumn::make('status')
-                    ->searchable(),
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'aprovado'  => 'success',
+                        'reprovado' => 'danger',
+                        default     => 'warning',
+                    }),
                 TextColumn::make('validade')
-                    ->dateTime()
+                    ->label('Validade')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

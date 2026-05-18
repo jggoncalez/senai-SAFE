@@ -15,20 +15,29 @@ class ProfessorsTable
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
-                    ->searchable(),
-                TextColumn::make('turma.id')
-                    ->searchable(),
                 TextColumn::make('nome')
-                    ->searchable(),
+                    ->label('Nome')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('matricula')
+                    ->label('Matrícula')
                     ->searchable(),
+                TextColumn::make('turma.nome')
+                    ->label('Turma')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('user.name')
+                    ->label('Usuário')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

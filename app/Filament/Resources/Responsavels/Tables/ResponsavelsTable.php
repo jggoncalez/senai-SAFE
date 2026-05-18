@@ -15,25 +15,35 @@ class ResponsavelsTable
     {
         return $table
             ->columns([
-                TextColumn::make('aluno.id')
-                    ->searchable(),
                 TextColumn::make('nome')
+                    ->label('Nome')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('aluno.nome')
+                    ->label('Aluno')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('parentesco')
+                    ->label('Parentesco')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('E-mail')
                     ->searchable(),
                 TextColumn::make('telefone')
-                    ->searchable(),
+                    ->label('Telefone')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('telegram_chat_id')
-                    ->searchable(),
-                TextColumn::make('parentesco')
-                    ->searchable(),
+                    ->label('Chat ID Telegram')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

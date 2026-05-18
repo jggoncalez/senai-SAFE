@@ -11,14 +11,19 @@ class TurmaInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('nome'),
-                TextEntry::make('periodo'),
-                TextEntry::make('ano_letivo'),
+                TextEntry::make('nome')
+                    ->label('Nome'),
+                TextEntry::make('periodo')
+                    ->label('Período'),
+                TextEntry::make('ano_letivo')
+                    ->label('Ano Letivo'),
                 TextEntry::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->placeholder('-'),
             ]);
     }

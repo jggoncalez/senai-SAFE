@@ -16,20 +16,31 @@ class RegistroGatesTable
         return $table
             ->columns([
                 TextColumn::make('autorizacao.id')
-                    ->searchable(),
+                    ->label('Autorização')
+                    ->sortable(),
                 TextColumn::make('user.name')
+                    ->label('Registrado por')
                     ->searchable(),
                 TextColumn::make('tipo')
-                    ->searchable(),
+                    ->label('Tipo')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'entrada' => 'success',
+                        'saida'   => 'danger',
+                        default   => 'gray',
+                    }),
                 TextColumn::make('registrado_at')
-                    ->dateTime()
+                    ->label('Registrado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado em')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

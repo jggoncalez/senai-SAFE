@@ -20,9 +20,15 @@ class TurmaResource extends Resource
 {
     protected static ?string $model = Turma::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
 
-    protected static ?string $recordTitleAttribute = 'Turma';
+    protected static ?string $navigationLabel = 'Turmas';
+
+    protected static ?string $modelLabel = 'Turma';
+
+    protected static ?string $pluralModelLabel = 'Turmas';
+
+    protected static ?string $recordTitleAttribute = 'nome';
 
     public static function form(Schema $schema): Schema
     {
