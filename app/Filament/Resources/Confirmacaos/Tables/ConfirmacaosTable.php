@@ -9,6 +9,7 @@ use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\DB;
 
 
 class ConfirmacaosTable
@@ -59,14 +60,16 @@ class ConfirmacaosTable
                     ->modalDescription(fn (Autorizacao $record): string => "Confirma que {$record->aluno->nome} pode sair da sala? ({$record->aulas_perdidas} aula(s) perdida(s))")
                     ->action(function (Autorizacao $record): void {
                         $professor = auth()->user()?->professor;
-                        if ($professor) {
-                            Confirmacao::create([
-                                'autorizacao_id' => $record->id,
-                                'professor_id'   => $professor->id,
-                                'confirmado_at'  => now(),
-                            ]);
-                        }
-                        $record->update(['status' => 'confirmado']);
+                        DB::transaction(function () use ($record, $professor): void {
+                            if ($professor) {
+                                Confirmacao::create([
+                                    'autorizacao_id' => $record->id,
+                                    'professor_id'   => $professor->id,
+                                    'confirmado_at'  => now(),
+                                ]);
+                            }
+                            $record->update(['status' => 'confirmado']);
+                        });
                         Notification::make()
                             ->title("Saída de {$record->aluno->nome} liberada")
                             ->success()

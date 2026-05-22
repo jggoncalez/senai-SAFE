@@ -13,6 +13,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use UnitEnum;
 
 class RegistroGateResource extends Resource
@@ -114,14 +115,16 @@ class RegistroGateResource extends Resource
                     ->modalDescription(fn (Autorizacao $record): string => "Turma: {$record->aluno->turma->nome} — Aulas perdidas: {$record->aulas_perdidas}")
                     ->action(function (Autorizacao $record): void {
                         $agora = now();
-                        RegistroGate::create([
-                            'autorizacao_id' => $record->id,
-                            'user_id'        => auth()->id(),
-                            'tipo'           => $record->tipo,
-                            'registrado_at'  => $agora,
-                            'aulas_perdidas' => $record->aulas_perdidas,
+                        DB::transaction(function () use ($record, $agora): void {
+                            RegistroGate::create([
+                                'autorizacao_id' => $record->id,
+                                'user_id'        => auth()->id(),
+                                'tipo'           => $record->tipo,
+                                'registrado_at'  => $agora,
+                                'aulas_perdidas' => $record->aulas_perdidas,
+                            ]);
+                            $record->update(['status' => 'concluido']);
                         ]);
-                        $record->update(['status' => 'concluido']);
                         Notification::make()
                             ->title("Saída de {$record->aluno->nome} registrada às {$agora->format('H:i')}")
                             ->success()

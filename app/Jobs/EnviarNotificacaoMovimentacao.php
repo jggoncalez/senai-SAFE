@@ -10,6 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Throwable;
+use UnexpectedValueException;
 
 class EnviarNotificacaoMovimentacao implements ShouldQueue
 {
@@ -32,10 +34,20 @@ class EnviarNotificacaoMovimentacao implements ShouldQueue
         $notification = match($registro->tipo) {
             'saida'   => new AlunoSaiuNotification($aluno, $registro),
             'entrada' => new AlunoEntrouNotification($aluno, $registro),
+            default   => null,
         };
 
+        if (! $notification) {
+            report(new UnexpectedValueException("Tipo de registro desconhecido: {$registro->tipo}"));
+            return;
+        }
+
         foreach ($responsaveis as $responsavel) {
-            $responsavel->notify($notification);
+            try {
+                $responsavel->notify($notification);
+            } catch (Throwable $exception) {
+                report($exception);
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ class RegistroGate extends Model
     protected static function booted(): void
     {
         static::created(function (RegistroGate $registro) {
-            EnviarNotificacaoMovimentacao::dispatchSync($registro);
+            EnviarNotificacaoMovimentacao::dispatch($registro)->afterCommit();
         });
     }
 

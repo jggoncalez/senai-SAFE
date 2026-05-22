@@ -8,6 +8,7 @@ use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\DB;
 
 class EntradasPendentesTable
 {
@@ -48,24 +49,27 @@ class EntradasPendentesTable
                     ->modalDescription(fn (Autorizacao $record): string => "Turma: {$record->aluno->turma->nome} — Aulas perdidas: {$record->aulas_perdidas}")
                     ->action(function (Autorizacao $record): void {
                         $professor = auth()->user()?->professor;
+                        $agora = now();
 
-                        if ($professor) {
-                            \App\Models\Confirmacao::create([
+                        DB::transaction(function () use ($record, $professor, $agora): void {
+                            if ($professor) {
+                                \App\Models\Confirmacao::create([
+                                    'autorizacao_id' => $record->id,
+                                    'professor_id'   => $professor->id,
+                                    'confirmado_at'  => $agora,
+                                ]);
+                            }
+
+                            \App\Models\RegistroGate::create([
                                 'autorizacao_id' => $record->id,
-                                'professor_id'   => $professor->id,
-                                'confirmado_at'  => now(),
+                                'user_id'        => auth()->id(),
+                                'tipo'           => 'entrada',
+                                'registrado_at'  => $agora,
+                                'aulas_perdidas' => $record->aulas_perdidas,
                             ]);
-                        }
 
-                        \App\Models\RegistroGate::create([
-                            'autorizacao_id' => $record->id,
-                            'user_id'        => auth()->id(),
-                            'tipo'           => 'entrada',
-                            'registrado_at'  => now(),
-                            'aulas_perdidas' => $record->aulas_perdidas,
-                        ]);
-
-                        $record->update(['status' => 'concluido']);
+                            $record->update(['status' => 'concluido']);
+                        });
 
                         Notification::make()
                             ->title("Entrada de {$record->aluno->nome} confirmada")
