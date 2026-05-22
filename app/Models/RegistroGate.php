@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\EnviarNotificacaoMovimentacao;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,24 +14,31 @@ class RegistroGate extends Model
 
     protected $fillable = [
         'autorizacao_id', 'user_id',
-        'tipo', 'registrado_at', 'observacao',
+        'tipo', 'registrado_at', 'observacao', 'aulas_perdidas',
     ];
 
     protected $casts = [
         'registrado_at' => 'datetime',
     ];
 
-    public function autorizacao(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    protected static function booted(): void
+    {
+        static::created(function (RegistroGate $registro) {
+            EnviarNotificacaoMovimentacao::dispatch($registro);
+        });
+    }
+
+    public function autorizacao()
     {
         return $this->belongsTo(Autorizacao::class);
     }
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function notificacoes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function notificacoes()
     {
         return $this->hasMany(Notificacao::class, 'registro_id');
     }

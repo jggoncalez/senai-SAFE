@@ -32,6 +32,17 @@ class RegistroGateForm
                         'saida'   => 'Saída',
                     ])
                     ->required(),
+                Select::make('aulas_perdidas')
+                    ->label('Aulas Perdidas')
+                    ->options([
+                        0 => '0 — nenhuma aula perdida',
+                        1 => '1 — perde 1 aula',
+                        2 => '2 — perde 2 aulas',
+                        3 => '3 — perde 3 aulas',
+                        4 => '4 — perde 4 aulas',
+                    ])
+                    ->default(0)
+                    ->required(),
                 DateTimePicker::make('registrado_at')
                     ->label('Registrado em')
                     ->required(),

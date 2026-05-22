@@ -13,6 +13,9 @@ class AlunoInfolist
             ->components([
                 TextEntry::make('turma.nome')
                     ->label('Turma'),
+                TextEntry::make('responsavelPrincipal.nome')
+                    ->label('Responsável Principal')
+                    ->placeholder('-'),
                 TextEntry::make('nome')
                     ->label('Nome'),
                 TextEntry::make('matricula')

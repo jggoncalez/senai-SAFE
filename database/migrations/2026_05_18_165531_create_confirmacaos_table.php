@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('confirmacoes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('autorizacao_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('professor_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('autorizacao_id')->constrained('autorizacoes')->cascadeOnDelete();
+            $table->foreignId('professor_id')->constrained('professores')->cascadeOnDelete();
             $table->dateTime('confirmado_at');
             $table->text('observacao')->nullable();
             $table->timestamps();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('confirmacaos');
+        Schema::dropIfExists('confirmacoes');
     }
 };

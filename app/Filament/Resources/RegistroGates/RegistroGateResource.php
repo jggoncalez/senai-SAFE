@@ -2,42 +2,50 @@
 
 namespace App\Filament\Resources\RegistroGates;
 
-use App\Filament\Resources\RegistroGates\Pages\CreateRegistroGate;
-use App\Filament\Resources\RegistroGates\Pages\EditRegistroGate;
 use App\Filament\Resources\RegistroGates\Pages\ListRegistroGates;
-use App\Filament\Resources\RegistroGates\Pages\ViewRegistroGate;
-use App\Filament\Resources\RegistroGates\Schemas\RegistroGateForm;
-use App\Filament\Resources\RegistroGates\Schemas\RegistroGateInfolist;
 use App\Filament\Resources\RegistroGates\Tables\RegistroGatesTable;
-use App\Models\RegistroGate;
+use App\Models\Autorizacao;
 use BackedEnum;
+use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Filament\Support\Icons\Heroicon;
 
 class RegistroGateResource extends Resource
 {
-    protected static ?string $model = RegistroGate::class;
+    protected static ?string $model = Autorizacao::class;
+
+    protected static ?string $slug = 'registros-gate';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowRightOnRectangle;
 
-    protected static ?string $navigationLabel = 'Registros de Acesso';
+    protected static string|UnitEnum|null $navigationGroup = 'Portaria';
 
-    protected static ?string $modelLabel = 'Registro de Acesso';
+    protected static ?int $navigationSort = 2;
 
-    protected static ?string $pluralModelLabel = 'Registros de Acesso';
+    protected static ?string $navigationLabel = 'Saídas Pendentes';
 
-    protected static ?string $recordTitleAttribute = 'tipo';
+    protected static ?string $modelLabel = 'Saída Pendente';
 
-    public static function form(Schema $schema): Schema
+    protected static ?string $pluralModelLabel = 'Saídas Pendentes';
+
+    public static function canViewAny(): bool
     {
-        return RegistroGateForm::configure($schema);
+        return auth()->user()?->hasAnyRole(['portaria', 'admin']) ?? false;
     }
 
-    public static function infolist(Schema $schema): Schema
+    public static function canCreate(): bool
     {
-        return RegistroGateInfolist::configure($schema);
+        return false;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('tipo', 'saida')
+            ->where('status', 'aprovado')
+            ->whereDoesntHave('registrosGate');
     }
 
     public static function table(Table $table): Table
@@ -47,18 +55,13 @@ class RegistroGateResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
             'index' => ListRegistroGates::route('/'),
-            'create' => CreateRegistroGate::route('/create'),
-            'view' => ViewRegistroGate::route('/{record}'),
-            'edit' => EditRegistroGate::route('/{record}/edit'),
         ];
     }
 }

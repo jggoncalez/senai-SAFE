@@ -9,6 +9,8 @@ class Turma extends Model
 {
     use HasFactory;
 
+    protected $table = 'turmas';
+
     protected $fillable = ['nome', 'periodo', 'ano_letivo'];
 
     public function alunos(): \Illuminate\Database\Eloquent\Relations\HasMany

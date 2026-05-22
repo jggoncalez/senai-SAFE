@@ -24,11 +24,14 @@ class AlunoSaiuNotification extends Notification
 
     public function toMail($notifiable): MailMessage
     {
+        $aulasPerdidas = $this->registro->autorizacao->aulas_perdidas;
+
         return (new MailMessage)
             ->subject('SAFE — Saída registrada')
             ->greeting("Olá, {$notifiable->nome}!")
             ->line("O aluno **{$this->aluno->nome}** saiu da escola.")
             ->line("🕐 Horário: {$this->registro->registrado_at->format('d/m/Y H:i')}")
+            ->line("📚 Aulas perdidas: {$aulasPerdidas}")
             ->line("📍 Registrado por: {$this->registro->user->name}")
             ->line('Esta é uma notificação automática do sistema SAFE.')
             ->salutation('Atenciosamente, SAFE Sistema Escolar');

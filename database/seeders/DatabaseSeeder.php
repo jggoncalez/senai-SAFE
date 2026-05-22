@@ -2,22 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Aluno;
 use App\Models\Professor;
 use App\Models\Responsavel;
 use App\Models\Turma;
-
+use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         $this->call(RoleSeeder::class);
@@ -44,14 +41,34 @@ class DatabaseSeeder extends Seeder
         });
 
         $admin = User::factory()->create([
-            'name'  => 'Admin SAFE',
-            'email' => 'admin@safe.dev',
+            'name'     => 'Admin SAFE',
+            'email'    => 'admin@safe.dev',
+            'password' => Hash::make('password'),
         ]);
         $admin->assignRole('admin');
 
+        $aqv = User::factory()->create([
+            'name'     => 'AQV SAFE',
+            'email'    => 'aqv@safe.dev',
+            'password' => Hash::make('password'),
+        ]);
+        $aqv->assignRole('aqv');
+
+        $professor = User::factory()->create([
+            'name'     => 'Professor SAFE',
+            'email'    => 'professor@safe.dev',
+            'password' => Hash::make('password'),
+        ]);
+        $professor->assignRole('professor');
+        Professor::factory()->create([
+            'user_id'  => $professor->id,
+            'turma_id' => $turmas->first()->id,
+        ]);
+
         $portaria = User::factory()->create([
-            'name'  => 'Portaria SAFE',
-            'email' => 'portaria@safe.dev',
+            'name'     => 'Portaria SAFE',
+            'email'    => 'portaria@safe.dev',
+            'password' => Hash::make('password'),
         ]);
         $portaria->assignRole('portaria');
     }

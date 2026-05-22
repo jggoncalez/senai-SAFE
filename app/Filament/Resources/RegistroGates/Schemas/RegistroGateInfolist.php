@@ -23,6 +23,14 @@ class RegistroGateInfolist
                         'saida'   => 'danger',
                         default   => 'gray',
                     }),
+                TextEntry::make('aulas_perdidas')
+                    ->label('Aulas Perdidas')
+                    ->badge()
+                    ->color(fn ($state): string => match (true) {
+                        $state == 0 => 'success',
+                        $state <= 2 => 'warning',
+                        default     => 'danger',
+                    }),
                 TextEntry::make('registrado_at')
                     ->label('Registrado em')
                     ->dateTime('d/m/Y H:i'),

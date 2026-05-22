@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Autorizacaos\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class AutorizacaoForm
@@ -20,28 +20,35 @@ class AutorizacaoForm
                     ->searchable()
                     ->preload()
                     ->required(),
-                Select::make('responsavel_id')
-                    ->label('Responsável')
-                    ->relationship('responsavel', 'nome')
-                    ->searchable()
-                    ->preload()
-                    ->required(),
-                TextInput::make('tipo')
+                Hidden::make('aqv_user_id')
+                    ->default(fn () => auth()->id()),
+                Select::make('tipo')
                     ->label('Tipo')
-                    ->required()
-                    ->maxLength(100),
-                Select::make('status')
-                    ->label('Status')
                     ->options([
-                        'pendente'  => 'Pendente',
-                        'aprovado'  => 'Aprovado',
-                        'reprovado' => 'Reprovado',
+                        'saida'   => 'Saída',
+                        'entrada' => 'Entrada',
                     ])
-                    ->default('pendente')
+                    ->default('saida')
                     ->required(),
-                DateTimePicker::make('validade')
-                    ->label('Validade')
-                    ->required(),
+                Hidden::make('status')
+                    ->default('aprovado'),
+                CheckboxList::make('aulas_perdidas')
+                    ->label('Aulas perdidas')
+                    ->options([
+                        '1' => '1ª Aula',
+                        '2' => '2ª Aula',
+                        '3' => '3ª Aula',
+                        '4' => '4ª Aula',
+                    ])
+                    ->columns(4)
+                    ->default(['1', '2', '3', '4'])
+                    ->afterStateHydrated(function (CheckboxList $component, $state): void {
+                        $count = (int) ($state ?? 0);
+                        $component->state(
+                            $count > 0 ? array_map('strval', range(1, $count)) : []
+                        );
+                    })
+                    ->dehydrateStateUsing(fn ($state): int => count((array) ($state ?? []))),
                 Textarea::make('observacao')
                     ->label('Observação')
                     ->columnSpanFull(),

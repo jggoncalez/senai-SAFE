@@ -11,6 +11,7 @@ use App\Filament\Resources\Turmas\Schemas\TurmaInfolist;
 use App\Filament\Resources\Turmas\Tables\TurmasTable;
 use App\Models\Turma;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -21,6 +22,10 @@ class TurmaResource extends Resource
     protected static ?string $model = Turma::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Cadastros';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationLabel = 'Turmas';
 

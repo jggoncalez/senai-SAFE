@@ -19,35 +19,37 @@ class AutorizacaosTable
                     ->label('Aluno')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('responsavel.nome')
-                    ->label('Responsável')
+                TextColumn::make('aluno.turma.nome')
+                    ->label('Turma')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('tipo')
-                    ->label('Tipo')
-                    ->searchable(),
+                TextColumn::make('aulas_perdidas')
+                    ->label('Aulas Perdidas')
+                    ->badge()
+                    ->color(fn ($state): string => match (true) {
+                        $state == 0 => 'success',
+                        $state <= 2 => 'warning',
+                        default     => 'danger',
+                    })
+                    ->alignCenter()
+                    ->sortable(),
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'aprovado'  => 'success',
-                        'reprovado' => 'danger',
-                        default     => 'warning',
+                        'aprovado'   => 'success',
+                        'confirmado' => 'info',
+                        'concluido'  => 'gray',
+                        'cancelado'  => 'danger',
+                        default      => 'gray',
                     }),
-                TextColumn::make('validade')
-                    ->label('Validade')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable(),
+                TextColumn::make('aqv.name')
+                    ->label('Criado por')
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->label('Criado em')
                     ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->label('Atualizado em')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
                 //

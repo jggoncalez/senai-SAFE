@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('autorizacoes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('aluno_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('responsavel_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('aluno_id')->constrained('alunos')->cascadeOnDelete();
+            $table->foreignId('aqv_user_id')->constrained('users')->cascadeOnDelete();
             $table->enum('tipo', ['entrada', 'saida']);
-            $table->enum('status', ['pendente', 'aprovado', 'expirado', 'cancelado'])
-                ->default('pendente');
-            $table->dateTime('validade');
+            $table->enum('status', ['aprovado', 'confirmado', 'concluido', 'cancelado'])
+                ->default('aprovado');
+            $table->tinyInteger('aulas_perdidas')->default(0);
             $table->text('observacao')->nullable();
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('autorizacaos');
+        Schema::dropIfExists('autorizacoes');
     }
 };

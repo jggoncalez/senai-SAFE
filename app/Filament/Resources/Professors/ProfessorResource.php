@@ -11,6 +11,7 @@ use App\Filament\Resources\Professors\Schemas\ProfessorInfolist;
 use App\Filament\Resources\Professors\Tables\ProfessorsTable;
 use App\Models\Professor;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -21,6 +22,10 @@ class ProfessorResource extends Resource
     protected static ?string $model = Professor::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Cadastros';
+
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $navigationLabel = 'Professores';
 

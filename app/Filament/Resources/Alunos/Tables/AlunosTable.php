@@ -26,6 +26,11 @@ class AlunosTable
                 TextColumn::make('matricula')
                     ->label('Matrícula')
                     ->searchable(),
+                TextColumn::make('responsavelPrincipal.nome')
+                    ->label('Responsável Principal')
+                    ->placeholder('-')
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('foto_url')
                     ->label('Foto (URL)')
                     ->toggleable(isToggledHiddenByDefault: true),

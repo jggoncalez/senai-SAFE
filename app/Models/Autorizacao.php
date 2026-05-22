@@ -12,22 +12,27 @@ class Autorizacao extends Model
     protected $table = 'autorizacoes';
 
     protected $fillable = [
-        'aluno_id', 'responsavel_id', 'tipo',
-        'status', 'validade', 'observacao',
+        'aluno_id', 'aqv_user_id', 'tipo',
+        'status', 'aulas_perdidas', 'observacao',
     ];
 
     protected $casts = [
-        'validade' => 'datetime',
+        'aulas_perdidas' => 'integer',
     ];
+
+    public function getValidadeAttribute(): \Illuminate\Support\Carbon
+    {
+        return today()->endOfDay();
+    }
 
     public function aluno(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Aluno::class);
     }
 
-    public function responsavel(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function aqv(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Responsavel::class);
+        return $this->belongsTo(User::class, 'aqv_user_id');
     }
 
     public function confirmacao(): \Illuminate\Database\Eloquent\Relations\HasOne
@@ -42,7 +47,6 @@ class Autorizacao extends Model
 
     public function estaValida(): bool
     {
-        return $this->status === 'aprovado'
-            && $this->validade->isFuture();
+        return $this->status === 'aprovado';
     }
 }

@@ -11,6 +11,7 @@ use App\Filament\Resources\Autorizacaos\Schemas\AutorizacaoInfolist;
 use App\Filament\Resources\Autorizacaos\Tables\AutorizacaosTable;
 use App\Models\Autorizacao;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -21,6 +22,12 @@ class AutorizacaoResource extends Resource
     protected static ?string $model = Autorizacao::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocument;
+
+    protected static ?string $slug = 'autorizacoes';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Portaria';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationLabel = 'Autorizações';
 
@@ -43,6 +50,11 @@ class AutorizacaoResource extends Resource
     public static function table(Table $table): Table
     {
         return AutorizacaosTable::configure($table);
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasAnyRole(['aqv', 'admin']) ?? false;
     }
 
     public static function getRelations(): array

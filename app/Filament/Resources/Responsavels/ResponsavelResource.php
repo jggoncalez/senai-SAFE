@@ -11,6 +11,7 @@ use App\Filament\Resources\Responsavels\Schemas\ResponsavelInfolist;
 use App\Filament\Resources\Responsavels\Tables\ResponsavelsTable;
 use App\Models\Responsavel;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -21,6 +22,10 @@ class ResponsavelResource extends Resource
     protected static ?string $model = Responsavel::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedIdentification;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Cadastros';
+
+    protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationLabel = 'Responsáveis';
 

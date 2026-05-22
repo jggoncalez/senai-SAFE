@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('registros_gate', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('autorizacao_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('autorizacao_id')->constrained('autorizacoes')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->enum('tipo', ['entrada', 'saida']);
             $table->dateTime('registrado_at');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('registro_gates');
+        Schema::dropIfExists('registros_gate');
     }
 };

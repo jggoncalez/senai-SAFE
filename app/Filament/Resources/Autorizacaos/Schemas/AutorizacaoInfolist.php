@@ -13,21 +13,30 @@ class AutorizacaoInfolist
             ->components([
                 TextEntry::make('aluno.nome')
                     ->label('Aluno'),
-                TextEntry::make('responsavel.nome')
-                    ->label('Responsável'),
+                TextEntry::make('aluno.turma.nome')
+                    ->label('Turma'),
+                TextEntry::make('aqv.name')
+                    ->label('Criado por (AQV)'),
                 TextEntry::make('tipo')
                     ->label('Tipo'),
                 TextEntry::make('status')
                     ->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'aprovado'  => 'success',
-                        'reprovado' => 'danger',
-                        default     => 'warning',
+                        'aprovado'   => 'success',
+                        'confirmado' => 'info',
+                        'concluido'  => 'gray',
+                        'cancelado'  => 'danger',
+                        default      => 'gray',
                     }),
-                TextEntry::make('validade')
-                    ->label('Validade')
-                    ->dateTime('d/m/Y H:i'),
+                TextEntry::make('aulas_perdidas')
+                    ->label('Aulas Perdidas')
+                    ->badge()
+                    ->color(fn ($state): string => match (true) {
+                        $state == 0 => 'success',
+                        $state <= 2 => 'warning',
+                        default     => 'danger',
+                    }),
                 TextEntry::make('observacao')
                     ->label('Observação')
                     ->placeholder('-')

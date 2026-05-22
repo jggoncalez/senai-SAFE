@@ -11,6 +11,7 @@ use App\Filament\Resources\Alunos\Schemas\AlunoInfolist;
 use App\Filament\Resources\Alunos\Tables\AlunosTable;
 use App\Models\Aluno;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -21,6 +22,10 @@ class AlunoResource extends Resource
     protected static ?string $model = Aluno::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Cadastros';
+
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationLabel = 'Alunos';
 

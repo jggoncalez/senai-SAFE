@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\RegistroGates\Tables;
+namespace App\Filament\Resources\Confirmacaos\Tables;
 
 use App\Models\Autorizacao;
-use App\Models\RegistroGate;
+use App\Models\Confirmacao;
 use Filament\Actions\Action;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class RegistroGatesTable
+class ConfirmacaosTable
 {
     public static function configure(Table $table): Table
     {
@@ -22,14 +22,6 @@ class RegistroGatesTable
                 TextColumn::make('aluno.turma.nome')
                     ->label('Turma')
                     ->sortable(),
-                TextColumn::make('tipo')
-                    ->label('Tipo')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'saida'   => 'danger',
-                        'entrada' => 'success',
-                        default   => 'gray',
-                    }),
                 TextColumn::make('aulas_perdidas')
                     ->label('Aulas Perdidas')
                     ->badge()
@@ -40,23 +32,29 @@ class RegistroGatesTable
                     })
                     ->alignCenter()
                     ->sortable(),
+                TextColumn::make('observacao')
+                    ->label('Observação')
+                    ->placeholder('-')
+                    ->limit(50),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                Action::make('registrar')
-                    ->label('Registrar saída')
-                    ->icon(Heroicon::OutlinedArrowRightOnRectangle)
-                    ->color('danger')
+                Action::make('confirmar_entrada')
+                    ->label('Confirmar entrada na sala')
+                    ->icon(Heroicon::OutlinedCheckCircle)
+                    ->color('success')
                     ->requiresConfirmation()
                     ->action(function (Autorizacao $record) {
-                        RegistroGate::create([
-                            'autorizacao_id' => $record->id,
-                            'user_id'        => auth()->id(),
-                            'tipo'           => $record->tipo,
-                            'registrado_at'  => now(),
-                        ]);
+                        $professor = auth()->user()?->professor;
+                        if ($professor) {
+                            Confirmacao::create([
+                                'autorizacao_id' => $record->id,
+                                'professor_id'   => $professor->id,
+                                'confirmado_at'  => now(),
+                            ]);
+                        }
                         $record->update(['status' => 'concluido']);
                     }),
             ]);
