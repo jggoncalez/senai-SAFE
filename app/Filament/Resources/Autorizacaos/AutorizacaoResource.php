@@ -21,11 +21,11 @@ class AutorizacaoResource extends Resource
 {
     protected static ?string $model = Autorizacao::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocument;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentCheck;
 
     protected static ?string $slug = 'autorizacoes';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Portaria';
+    protected static string|UnitEnum|null $navigationGroup = 'Autorizações';
 
     protected static ?int $navigationSort = 1;
 
@@ -36,6 +36,27 @@ class AutorizacaoResource extends Resource
     protected static ?string $pluralModelLabel = 'Autorizações';
 
     protected static ?string $recordTitleAttribute = 'tipo';
+
+    public static function getNavigationDescription(): ?string
+    {
+        return 'Autorizações de saída e entrada de alunos';
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = Autorizacao::where('status', 'aprovado')
+            ->whereDoesntHave('confirmacao')
+            ->whereDoesntHave('registrosGate')
+            ->whereDate('created_at', today())
+            ->count();
+
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'warning';
+    }
 
     public static function form(Schema $schema): Schema
     {

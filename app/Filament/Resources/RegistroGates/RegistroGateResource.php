@@ -22,13 +22,33 @@ class RegistroGateResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Portaria';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationLabel = 'Saídas Pendentes';
 
     protected static ?string $modelLabel = 'Saída Pendente';
 
     protected static ?string $pluralModelLabel = 'Saídas Pendentes';
+
+    public static function getNavigationDescription(): ?string
+    {
+        return 'Saídas aguardando registro na portaria';
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = Autorizacao::where('tipo', 'saida')
+            ->where('status', 'aprovado')
+            ->whereDoesntHave('registrosGate')
+            ->count();
+
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return 'danger';
+    }
 
     public static function canViewAny(): bool
     {

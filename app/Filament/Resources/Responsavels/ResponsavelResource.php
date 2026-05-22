@@ -21,11 +21,11 @@ class ResponsavelResource extends Resource
 {
     protected static ?string $model = Responsavel::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedIdentification;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Cadastros';
+    protected static string|UnitEnum|null $navigationGroup = 'Gestão';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationLabel = 'Responsáveis';
 
@@ -34,6 +34,16 @@ class ResponsavelResource extends Resource
     protected static ?string $pluralModelLabel = 'Responsáveis';
 
     protected static ?string $recordTitleAttribute = 'nome';
+
+    public static function getNavigationDescription(): ?string
+    {
+        return 'Responsáveis pelos alunos';
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasRole('admin') ?? false;
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -23,6 +23,11 @@ class AutorizacaosTable
                     ->label('Turma')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('tipo')
+                    ->label('Tipo')
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => $state === 'saida' ? 'Saída' : 'Entrada')
+                    ->color(fn ($state): string => $state === 'saida' ? 'danger' : 'success'),
                 TextColumn::make('aulas_perdidas')
                     ->label('Aulas Perdidas')
                     ->badge()
@@ -36,19 +41,27 @@ class AutorizacaosTable
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
+                    ->formatStateUsing(fn ($state): string => match ($state) {
+                        'aprovado'   => 'Aprovado',
+                        'confirmado' => 'Confirmado',
+                        'concluido'  => 'Concluído',
+                        'cancelado'  => 'Cancelado',
+                        default      => ucfirst($state),
+                    })
                     ->color(fn (string $state): string => match ($state) {
-                        'aprovado'   => 'success',
-                        'confirmado' => 'info',
-                        'concluido'  => 'gray',
+                        'aprovado'   => 'info',
+                        'confirmado' => 'warning',
+                        'concluido'  => 'success',
                         'cancelado'  => 'danger',
                         default      => 'gray',
                     }),
                 TextColumn::make('aqv.name')
                     ->label('Criado por')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('created_at')
                     ->label('Criado em')
-                    ->dateTime('d/m/Y H:i')
+                    ->since()
                     ->sortable(),
             ])
             ->filters([
@@ -62,6 +75,7 @@ class AutorizacaosTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }

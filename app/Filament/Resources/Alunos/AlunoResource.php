@@ -21,13 +21,18 @@ class AlunoResource extends Resource
 {
     protected static ?string $model = Aluno::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Cadastros';
+    protected static string|UnitEnum|null $navigationGroup = 'Escola';
 
     protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationLabel = 'Alunos';
+
+    public static function getNavigationDescription(): ?string
+    {
+        return 'Alunos matriculados no sistema';
+    }
 
     protected static ?string $modelLabel = 'Aluno';
 

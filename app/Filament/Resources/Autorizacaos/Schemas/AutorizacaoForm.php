@@ -13,13 +13,15 @@ class AutorizacaoForm
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(2)
             ->components([
                 Select::make('aluno_id')
                     ->label('Aluno')
                     ->relationship('aluno', 'nome')
                     ->searchable()
                     ->preload()
-                    ->required(),
+                    ->required()
+                    ->columnSpanFull(),
                 Hidden::make('aqv_user_id')
                     ->default(fn () => auth()->id()),
                 Select::make('tipo')
@@ -48,7 +50,8 @@ class AutorizacaoForm
                             $count > 0 ? array_map('strval', range(1, $count)) : []
                         );
                     })
-                    ->dehydrateStateUsing(fn ($state): int => count((array) ($state ?? []))),
+                    ->dehydrateStateUsing(fn ($state): int => count((array) ($state ?? [])))
+                    ->columnSpanFull(),
                 Textarea::make('observacao')
                     ->label('Observação')
                     ->columnSpanFull(),
