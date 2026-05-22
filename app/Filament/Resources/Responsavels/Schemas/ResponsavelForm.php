@@ -21,7 +21,8 @@ class ResponsavelForm
                 TextInput::make('nome')
                     ->label('Nome')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->autofocus(),
                 TextInput::make('email')
                     ->label('E-mail')
                     ->email()
@@ -33,7 +34,9 @@ class ResponsavelForm
                     ->maxLength(20),
                 TextInput::make('telegram_chat_id')
                     ->label('Chat ID do Telegram')
-                    ->maxLength(50),
+                    ->maxLength(50)
+                    ->placeholder('Ex: 123456789')
+                    ->helperText('Necessário para receber notificações pelo Telegram.'),
                 TextInput::make('parentesco')
                     ->label('Parentesco')
                     ->required()

@@ -49,4 +49,29 @@ class Autorizacao extends Model
     {
         return $this->status === 'aprovado';
     }
+
+    public function scopeAprovadas(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('status', 'aprovado');
+    }
+
+    public function scopePendentesGate(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->whereDoesntHave('registrosGate');
+    }
+
+    public function scopePendentesConfirmacao(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->whereDoesntHave('confirmacao');
+    }
+
+    public function scopeSaidas(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('tipo', 'saida');
+    }
+
+    public function scopeEntradas(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('tipo', 'entrada');
+    }
 }

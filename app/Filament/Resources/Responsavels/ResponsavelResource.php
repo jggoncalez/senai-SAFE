@@ -11,6 +11,7 @@ use App\Filament\Resources\Responsavels\Schemas\ResponsavelInfolist;
 use App\Filament\Resources\Responsavels\Tables\ResponsavelsTable;
 use App\Models\Responsavel;
 use BackedEnum;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -23,9 +24,9 @@ class ResponsavelResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Gestão';
+    protected static string|UnitEnum|null $navigationGroup = 'Escola';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationLabel = 'Responsáveis';
 
@@ -43,6 +44,11 @@ class ResponsavelResource extends Resource
     public static function canViewAny(): bool
     {
         return auth()->user()?->hasRole('admin') ?? false;
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['aluno']);
     }
 
     public static function form(Schema $schema): Schema

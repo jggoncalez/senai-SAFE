@@ -23,7 +23,8 @@ class AutorizacoesPendentesWidget extends TableWidget
             ->whereDoesntHave('confirmacao')
             ->whereDoesntHave('registrosGate')
             ->with(['aluno.turma'])
-            ->latest();
+            ->latest()
+            ->limit(5);
     }
 
     public function table(Table $table): Table
@@ -58,6 +59,9 @@ class AutorizacoesPendentesWidget extends TableWidget
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'asc')
-            ->paginated(false);
+            ->paginated(false)
+            ->emptyStateIcon(\Filament\Support\Icons\Heroicon::OutlinedClipboardDocumentCheck)
+            ->emptyStateHeading('Nenhuma autorização pendente')
+            ->emptyStateDescription('Todas as autorizações aprovadas já foram processadas.');
     }
 }

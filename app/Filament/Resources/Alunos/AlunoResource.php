@@ -11,6 +11,7 @@ use App\Filament\Resources\Alunos\Schemas\AlunoInfolist;
 use App\Filament\Resources\Alunos\Tables\AlunosTable;
 use App\Models\Aluno;
 use BackedEnum;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -53,6 +54,11 @@ class AlunoResource extends Resource
     public static function table(Table $table): Table
     {
         return AlunosTable::configure($table);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['turma', 'responsavelPrincipal']);
     }
 
     public static function getRelations(): array

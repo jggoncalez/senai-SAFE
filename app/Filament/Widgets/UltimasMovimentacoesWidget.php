@@ -14,7 +14,7 @@ class UltimasMovimentacoesWidget extends TableWidget
 
     protected static ?string $heading = 'Últimas Movimentações do Dia';
 
-    protected static ?string $pollingInterval = '30s';
+    protected static ?string $pollingInterval = '60s';
 
     protected int|string|array $columnSpan = 'full';
 

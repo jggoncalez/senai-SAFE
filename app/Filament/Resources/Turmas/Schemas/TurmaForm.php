@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Turmas\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -14,11 +15,16 @@ class TurmaForm
                 TextInput::make('nome')
                     ->label('Nome')
                     ->required()
-                    ->maxLength(100),
-                TextInput::make('periodo')
+                    ->maxLength(100)
+                    ->autofocus(),
+                Select::make('periodo')
                     ->label('Período')
-                    ->required()
-                    ->maxLength(50),
+                    ->options([
+                        'manha' => 'Manhã',
+                        'tarde'  => 'Tarde',
+                        'noite'  => 'Noite',
+                    ])
+                    ->required(),
                 TextInput::make('ano_letivo')
                     ->label('Ano Letivo')
                     ->required()

@@ -11,6 +11,7 @@ use App\Filament\Resources\Autorizacaos\Schemas\AutorizacaoInfolist;
 use App\Filament\Resources\Autorizacaos\Tables\AutorizacaosTable;
 use App\Models\Autorizacao;
 use BackedEnum;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -44,9 +45,9 @@ class AutorizacaoResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $count = Autorizacao::where('status', 'aprovado')
-            ->whereDoesntHave('confirmacao')
-            ->whereDoesntHave('registrosGate')
+        $count = Autorizacao::aprovadas()
+            ->pendentesConfirmacao()
+            ->pendentesGate()
             ->whereDate('created_at', today())
             ->count();
 
@@ -56,6 +57,16 @@ class AutorizacaoResource extends Resource
     public static function getNavigationBadgeColor(): string|array|null
     {
         return 'warning';
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'Autorizações aprovadas hoje ainda sem confirmação ou registro';
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['aluno.turma', 'aqv']);
     }
 
     public static function form(Schema $schema): Schema

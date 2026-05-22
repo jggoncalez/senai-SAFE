@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -22,13 +23,16 @@ class AlunosTable
                 TextColumn::make('nome')
                     ->label('Nome')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->wrap(),
                 TextColumn::make('matricula')
                     ->label('Matrícula')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Matrícula copiada'),
                 TextColumn::make('responsavelPrincipal.nome')
                     ->label('Responsável Principal')
-                    ->placeholder('-')
+                    ->placeholder('—')
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('foto_url')
@@ -56,6 +60,9 @@ class AlunosTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->emptyStateIcon(Heroicon::OutlinedAcademicCap)
+            ->emptyStateHeading('Nenhum aluno cadastrado')
+            ->emptyStateDescription('Comece adicionando o primeiro aluno da turma.');
     }
 }

@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\RegistroGates\Tables;
+namespace App\Filament\Resources\EntradasPendentes\Tables;
 
 use App\Models\Autorizacao;
-use App\Models\RegistroGate;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class RegistroGatesTable
+class EntradasPendentesTable
 {
     public static function configure(Table $table): Table
     {
@@ -23,7 +22,6 @@ class RegistroGatesTable
                     ->weight('bold'),
                 TextColumn::make('aluno.turma.nome')
                     ->label('Turma')
-                    ->description(fn (Autorizacao $record): string => $record->aluno->turma->periodo ?? '')
                     ->sortable(),
                 TextColumn::make('aulas_perdidas')
                     ->label('Aulas Perdidas')
@@ -33,7 +31,6 @@ class RegistroGatesTable
                         $state <= 2 => 'warning',
                         default     => 'danger',
                     })
-                    ->icon(fn ($state) => $state > 2 ? Heroicon::OutlinedExclamationTriangle : null)
                     ->alignCenter()
                     ->sortable(),
                 TextColumn::make('created_at')
@@ -41,33 +38,44 @@ class RegistroGatesTable
                     ->since()
                     ->sortable(),
             ])
-            ->filters([
-                //
-            ])
             ->recordActions([
-                Action::make('registrar')
-                    ->label('Registrar saída')
-                    ->icon(Heroicon::OutlinedArrowRightOnRectangle)
-                    ->color('danger')
+                Action::make('confirmar_entrada')
+                    ->label('Confirmar entrada')
+                    ->icon(Heroicon::OutlinedCheck)
+                    ->color('info')
                     ->requiresConfirmation()
-                    ->modalHeading(fn (Autorizacao $record): string => "Registrar saída de {$record->aluno->nome}?")
+                    ->modalHeading(fn (Autorizacao $record): string => "Confirmar entrada de {$record->aluno->nome}?")
                     ->modalDescription(fn (Autorizacao $record): string => "Turma: {$record->aluno->turma->nome} — Aulas perdidas: {$record->aulas_perdidas}")
                     ->action(function (Autorizacao $record): void {
-                        $agora = now();
-                        RegistroGate::create([
+                        $professor = auth()->user()?->professor;
+
+                        if ($professor) {
+                            \App\Models\Confirmacao::create([
+                                'autorizacao_id' => $record->id,
+                                'professor_id'   => $professor->id,
+                                'confirmado_at'  => now(),
+                            ]);
+                        }
+
+                        \App\Models\RegistroGate::create([
                             'autorizacao_id' => $record->id,
                             'user_id'        => auth()->id(),
-                            'tipo'           => $record->tipo,
-                            'registrado_at'  => $agora,
+                            'tipo'           => 'entrada',
+                            'registrado_at'  => now(),
                             'aulas_perdidas' => $record->aulas_perdidas,
                         ]);
+
                         $record->update(['status' => 'concluido']);
+
                         Notification::make()
-                            ->title("Saída de {$record->aluno->nome} registrada às {$agora->format('H:i')}")
+                            ->title("Entrada de {$record->aluno->nome} confirmada")
                             ->success()
                             ->send();
                     }),
             ])
-            ->defaultSort('created_at', 'asc');
+            ->defaultSort('created_at', 'asc')
+            ->emptyStateIcon(Heroicon::OutlinedArrowLeftOnRectangle)
+            ->emptyStateHeading('Nenhuma entrada pendente')
+            ->emptyStateDescription('Nenhum aluno aguarda confirmação de entrada.');
     }
 }

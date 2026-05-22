@@ -6,7 +6,9 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class AutorizacaosTable
@@ -18,7 +20,8 @@ class AutorizacaosTable
                 TextColumn::make('aluno.nome')
                     ->label('Aluno')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->wrap(),
                 TextColumn::make('aluno.turma.nome')
                     ->label('Turma')
                     ->searchable()
@@ -65,7 +68,20 @@ class AutorizacaosTable
                     ->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->label('Status')
+                    ->options([
+                        'aprovado'   => 'Aprovado',
+                        'confirmado' => 'Confirmado',
+                        'concluido'  => 'Concluído',
+                        'cancelado'  => 'Cancelado',
+                    ]),
+                SelectFilter::make('tipo')
+                    ->label('Tipo')
+                    ->options([
+                        'entrada' => 'Entrada',
+                        'saida'   => 'Saída',
+                    ]),
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -76,6 +92,9 @@ class AutorizacaosTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->emptyStateIcon(Heroicon::OutlinedClipboardDocumentCheck)
+            ->emptyStateHeading('Nenhuma autorização encontrada')
+            ->emptyStateDescription('As autorizações aparecem conforme são criadas.');
     }
 }

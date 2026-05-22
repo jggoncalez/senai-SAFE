@@ -11,8 +11,11 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
+
 class NotificacaoResource extends Resource
 {
+    protected static bool $shouldRegisterNavigation = true;
+
     protected static ?string $model = Notificacao::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBell;
@@ -40,6 +43,11 @@ class NotificacaoResource extends Resource
     public static function canCreate(): bool
     {
         return false;
+    }
+
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return parent::getEloquentQuery()->with(['registroGate.autorizacao.aluno']);
     }
 
     public static function table(Table $table): Table
@@ -73,7 +81,10 @@ class NotificacaoResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->emptyStateIcon(Heroicon::OutlinedBell)
+            ->emptyStateHeading('Nenhuma notificação encontrada')
+            ->emptyStateDescription('As notificações são geradas automaticamente após os registros de saída.');
     }
 
     public static function getRelations(): array

@@ -21,6 +21,7 @@ class AutorizacaoForm
                     ->searchable()
                     ->preload()
                     ->required()
+                    ->autofocus()
                     ->columnSpanFull(),
                 Hidden::make('aqv_user_id')
                     ->default(fn () => auth()->id()),
@@ -44,6 +45,7 @@ class AutorizacaoForm
                     ])
                     ->columns(4)
                     ->default(['1', '2', '3', '4'])
+                    ->helperText('Marque as aulas que o aluno perderá durante a ausência.')
                     ->afterStateHydrated(function (CheckboxList $component, $state): void {
                         $count = (int) ($state ?? 0);
                         $component->state(
@@ -54,6 +56,9 @@ class AutorizacaoForm
                     ->columnSpanFull(),
                 Textarea::make('observacao')
                     ->label('Observação')
+                    ->placeholder('Informações adicionais sobre a autorização...')
+                    ->rows(3)
+                    ->maxLength(500)
                     ->columnSpanFull(),
             ]);
     }

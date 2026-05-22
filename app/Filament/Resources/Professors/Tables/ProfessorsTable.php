@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -21,7 +22,9 @@ class ProfessorsTable
                     ->sortable(),
                 TextColumn::make('matricula')
                     ->label('Matrícula')
-                    ->searchable(),
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Matrícula copiada'),
                 TextColumn::make('turma.nome')
                     ->label('Turma')
                     ->searchable()
@@ -52,6 +55,9 @@ class ProfessorsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->emptyStateIcon(Heroicon::OutlinedUserGroup)
+            ->emptyStateHeading('Nenhum professor cadastrado')
+            ->emptyStateDescription('Cadastre os professores responsáveis pelas turmas.');
     }
 }

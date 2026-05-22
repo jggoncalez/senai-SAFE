@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\Confirmacaos;
+namespace App\Filament\Resources\EntradasPendentes;
 
-use App\Filament\Resources\Confirmacaos\Pages\ListConfirmacaos;
-use App\Filament\Resources\Confirmacaos\Tables\ConfirmacaosTable;
+use App\Filament\Resources\EntradasPendentes\Pages\ListEntradasPendentes;
+use App\Filament\Resources\EntradasPendentes\Tables\EntradasPendentesTable;
 use App\Models\Autorizacao;
 use BackedEnum;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,34 +12,34 @@ use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Support\Icons\Heroicon;
 
-class ConfirmacaoResource extends Resource
+class EntradasPendentesResource extends Resource
 {
-    protected static bool $shouldRegisterNavigation = false;
-
     protected static ?string $model = Autorizacao::class;
 
-    protected static ?string $slug = 'liberacoes';
+    protected static ?string $slug = 'entradas-pendentes';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowLeftOnRectangle;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Autorizações';
+    protected static string|UnitEnum|null $navigationGroup = 'Movimentações';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationLabel = 'Liberações Pendentes';
+    protected static ?string $navigationLabel = 'Entradas Pendentes';
 
-    protected static ?string $modelLabel = 'Liberação Pendente';
+    protected static ?string $modelLabel = 'Entrada Pendente';
 
-    protected static ?string $pluralModelLabel = 'Liberações Pendentes';
+    protected static ?string $pluralModelLabel = 'Entradas Pendentes';
 
     public static function getNavigationDescription(): ?string
     {
-        return 'Alunos aguardando liberação da sala pelo professor';
+        return 'Alunos com autorização de entrada aguardando confirmação';
     }
 
     public static function getNavigationBadge(): ?string
     {
-        $query = Autorizacao::saidas()->aprovadas()->pendentesConfirmacao();
+        $query = Autorizacao::where('tipo', 'entrada')
+            ->where('status', 'aprovado')
+            ->whereDoesntHave('confirmacao');
 
         $user = auth()->user();
         if ($user?->professor) {
@@ -53,12 +53,7 @@ class ConfirmacaoResource extends Resource
 
     public static function getNavigationBadgeColor(): string|array|null
     {
-        return 'warning';
-    }
-
-    public static function getNavigationBadgeTooltip(): ?string
-    {
-        return 'Alunos aguardando liberação de saída da sala pelo professor';
+        return 'info';
     }
 
     public static function canViewAny(): bool
@@ -74,7 +69,7 @@ class ConfirmacaoResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery()
-            ->where('tipo', 'saida')
+            ->where('tipo', 'entrada')
             ->where('status', 'aprovado')
             ->whereDoesntHave('confirmacao')
             ->with(['aluno.turma']);
@@ -89,7 +84,7 @@ class ConfirmacaoResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return ConfirmacaosTable::configure($table);
+        return EntradasPendentesTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -100,7 +95,7 @@ class ConfirmacaoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListConfirmacaos::route('/'),
+            'index' => ListEntradasPendentes::route('/'),
         ];
     }
 }

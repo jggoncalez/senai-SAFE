@@ -10,6 +10,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
+
 class ConfirmacaosTable
 {
     public static function configure(Table $table): Table
@@ -40,21 +41,22 @@ class ConfirmacaosTable
                     ->sortable(),
                 TextColumn::make('observacao')
                     ->label('Observação')
-                    ->placeholder('-')
+                    ->placeholder('—')
                     ->limit(50)
+                    ->tooltip(fn ($state): ?string => strlen((string) $state) > 50 ? $state : null)
                     ->toggleable(),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                Action::make('liberar_aluno')
-                    ->label('Liberar aluno')
+                Action::make('liberar_saida')
+                    ->label('Liberar saída')
                     ->icon(Heroicon::OutlinedCheck)
                     ->color('success')
                     ->requiresConfirmation()
-                    ->modalHeading(fn (Autorizacao $record): string => "Liberar {$record->aluno->nome}?")
-                    ->modalDescription(fn (Autorizacao $record): string => "Confirma a entrada de {$record->aluno->nome} na sala? ({$record->aulas_perdidas} aula(s) perdida(s))")
+                    ->modalHeading(fn (Autorizacao $record): string => "Liberar saída de {$record->aluno->nome}?")
+                    ->modalDescription(fn (Autorizacao $record): string => "Confirma que {$record->aluno->nome} pode sair da sala? ({$record->aulas_perdidas} aula(s) perdida(s))")
                     ->action(function (Autorizacao $record): void {
                         $professor = auth()->user()?->professor;
                         if ($professor) {
@@ -64,13 +66,16 @@ class ConfirmacaosTable
                                 'confirmado_at'  => now(),
                             ]);
                         }
-                        $record->update(['status' => 'concluido']);
+                        $record->update(['status' => 'confirmado']);
                         Notification::make()
-                            ->title("Entrada de {$record->aluno->nome} confirmada")
+                            ->title("Saída de {$record->aluno->nome} liberada")
                             ->success()
                             ->send();
                     }),
             ])
-            ->defaultSort('created_at', 'asc');
+            ->defaultSort('created_at', 'asc')
+            ->emptyStateIcon(Heroicon::OutlinedCheckBadge)
+            ->emptyStateHeading('Nenhuma liberação pendente')
+            ->emptyStateDescription('Nenhum aluno aguarda liberação de saída da sala no momento.');
     }
 }

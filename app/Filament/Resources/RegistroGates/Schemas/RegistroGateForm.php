@@ -48,6 +48,9 @@ class RegistroGateForm
                     ->required(),
                 Textarea::make('observacao')
                     ->label('Observação')
+                    ->placeholder('Observações sobre o registro...')
+                    ->rows(3)
+                    ->maxLength(500)
                     ->columnSpanFull(),
             ]);
     }

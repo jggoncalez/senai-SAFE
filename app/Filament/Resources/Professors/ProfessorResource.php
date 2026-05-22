@@ -11,6 +11,7 @@ use App\Filament\Resources\Professors\Schemas\ProfessorInfolist;
 use App\Filament\Resources\Professors\Tables\ProfessorsTable;
 use App\Models\Professor;
 use BackedEnum;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -53,6 +54,11 @@ class ProfessorResource extends Resource
     public static function table(Table $table): Table
     {
         return ProfessorsTable::configure($table);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['turma', 'user']);
     }
 
     public static function getRelations(): array

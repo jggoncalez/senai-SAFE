@@ -27,7 +27,8 @@ class ProfessorForm
                 TextInput::make('nome')
                     ->label('Nome')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->autofocus(),
                 TextInput::make('matricula')
                     ->label('Matrícula')
                     ->required()

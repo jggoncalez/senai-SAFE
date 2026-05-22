@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -21,7 +22,20 @@ class TurmasTable
                     ->sortable(),
                 TextColumn::make('periodo')
                     ->label('Período')
-                    ->searchable(),
+                    ->searchable()
+                    ->badge()
+                    ->formatStateUsing(fn ($state): string => match ($state) {
+                        'manha' => 'Manhã',
+                        'tarde'  => 'Tarde',
+                        'noite'  => 'Noite',
+                        default  => ucfirst($state),
+                    })
+                    ->color(fn ($state): string => match ($state) {
+                        'manha' => 'primary',
+                        'tarde'  => 'warning',
+                        'noite'  => 'info',
+                        default  => 'gray',
+                    }),
                 TextColumn::make('ano_letivo')
                     ->label('Ano Letivo')
                     ->searchable()
@@ -48,6 +62,9 @@ class TurmasTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->emptyStateIcon(Heroicon::OutlinedBuildingLibrary)
+            ->emptyStateHeading('Nenhuma turma cadastrada')
+            ->emptyStateDescription('Crie as turmas antes de cadastrar alunos e professores.');
     }
 }
