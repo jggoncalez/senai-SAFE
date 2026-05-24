@@ -12,7 +12,7 @@ class Notificacao extends Model
     protected $table = 'notificacoes';
 
     protected $fillable = [
-        'registro_id', 'canal', 'status', 'enviado_at',
+        'registro_id', 'responsavel_id', 'canal', 'status', 'enviado_at',
     ];
 
     protected $casts = [
@@ -22,5 +22,10 @@ class Notificacao extends Model
     public function registroGate(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(RegistroGate::class, 'registro_id');
+    }
+
+    public function responsavel(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Responsavel::class);
     }
 }

@@ -47,7 +47,7 @@ class NotificacaoResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        return parent::getEloquentQuery()->with(['registroGate.autorizacao.aluno']);
+        return parent::getEloquentQuery()->with(['registroGate.autorizacao.aluno', 'responsavel']);
     }
 
     public static function table(Table $table): Table
@@ -58,6 +58,16 @@ class NotificacaoResource extends Resource
                     ->label('Aluno')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('responsavel.nome')
+                    ->label('Responsável')
+                    ->searchable()
+                    ->sortable()
+                    ->placeholder('—'),
+                TextColumn::make('responsavel.email')
+                    ->label('E-mail enviado para')
+                    ->searchable()
+                    ->copyable()
+                    ->placeholder('—'),
                 TextColumn::make('canal')
                     ->label('Canal')
                     ->badge()

@@ -13,6 +13,9 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Support\Facades\Blade;
 use Filament\Support\Colors\Color;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -67,5 +70,31 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
+    }
+
+    public function boot(): void
+    {
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::SIMPLE_PAGE_START,
+            fn (): string => Blade::render('
+                <div style="position:absolute;top:1.5rem;left:1.75rem;z-index:10;">
+                    <a href="/"
+                       style="display:inline-flex;align-items:center;gap:6px;
+                              color:#6b7280;font-size:13px;font-weight:500;
+                              text-decoration:none;
+                              padding:6px 12px;border-radius:8px;
+                              transition:color .15s,background .15s;"
+                       onmouseover="this.style.color=\'#1d6fce\';this.style.background=\'rgba(29,111,206,.07)\'"
+                       onmouseout="this.style.color=\'#6b7280\';this.style.background=\'transparent\'">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 12H5M12 5l-7 7 7 7"/>
+                        </svg>
+                        Voltar
+                    </a>
+                </div>
+            '),
+        );
     }
 }

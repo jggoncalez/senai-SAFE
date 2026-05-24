@@ -49,10 +49,11 @@ class EnviarNotificacaoMovimentacao implements ShouldQueue
                 continue;
             }
 
-            $notificacoes = collect($canais)->map(function (string $canal) use ($registro) {
+            $notificacoes = collect($canais)->map(function (string $canal) use ($registro, $responsavel) {
                 return $registro->notificacoes()->create([
-                    'canal' => $canal,
-                    'status' => 'pendente',
+                    'responsavel_id' => $responsavel->id,
+                    'canal'          => $canal,
+                    'status'         => 'pendente',
                 ]);
             });
 
