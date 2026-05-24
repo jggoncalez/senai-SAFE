@@ -124,7 +124,7 @@ class RegistroGateResource extends Resource
                                 'aulas_perdidas' => $record->aulas_perdidas,
                             ]);
                             $record->update(['status' => 'concluido']);
-                        ]);
+                        });
                         Notification::make()
                             ->title("Saída de {$record->aluno->nome} registrada às {$agora->format('H:i')}")
                             ->success()

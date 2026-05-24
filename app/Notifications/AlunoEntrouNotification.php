@@ -19,7 +19,7 @@ class AlunoEntrouNotification extends Notification
 
     public function via($notifiable): array
     {
-        return ['mail'];
+        return filled($notifiable->email) ? ['mail'] : [];
     }
 
     public function toMail($notifiable): MailMessage

@@ -42,6 +42,26 @@ class TurmaResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'nome';
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasAnyRole(['admin']) ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->hasRole('admin') ?? false;
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()?->hasRole('admin') ?? false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return auth()->user()?->hasRole('admin') ?? false;
+    }
+
     public static function form(Schema $schema): Schema
     {
         return TurmaForm::configure($schema);

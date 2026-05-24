@@ -37,10 +37,20 @@ class ResponsavelForm
                     ->maxLength(50)
                     ->placeholder('Ex: 123456789')
                     ->helperText('Necessário para receber notificações pelo Telegram.'),
-                TextInput::make('parentesco')
+                Select::make('parentesco')
                     ->label('Parentesco')
+                    ->options([
+                        'pai'               => 'Pai',
+                        'mae'               => 'Mãe',
+                        'avo'               => 'Avô',
+                        'ava'               => 'Avó',
+                        'tio'               => 'Tio',
+                        'tia'               => 'Tia',
+                        'responsavel_legal' => 'Responsável Legal',
+                        'outro'             => 'Outro',
+                    ])
                     ->required()
-                    ->maxLength(100),
+                    ->searchable(),
             ]);
     }
 }
