@@ -35,6 +35,11 @@ class ProfessorResource extends Resource
         return 'Professores responsáveis pelas turmas';
     }
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasRole('admin') ?? false;
+    }
+
     protected static ?string $modelLabel = 'Professor';
 
     protected static ?string $pluralModelLabel = 'Professores';

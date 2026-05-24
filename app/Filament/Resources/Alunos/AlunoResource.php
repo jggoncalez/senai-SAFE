@@ -35,6 +35,11 @@ class AlunoResource extends Resource
         return 'Alunos matriculados no sistema';
     }
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasRole('admin') ?? false;
+    }
+
     protected static ?string $modelLabel = 'Aluno';
 
     protected static ?string $pluralModelLabel = 'Alunos';

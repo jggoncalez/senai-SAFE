@@ -43,9 +43,31 @@ class EnviarNotificacaoMovimentacao implements ShouldQueue
         }
 
         foreach ($responsaveis as $responsavel) {
+            $canais = $notification->via($responsavel);
+
+            if (empty($canais)) {
+                continue;
+            }
+
+            $notificacoes = collect($canais)->map(function (string $canal) use ($registro) {
+                return $registro->notificacoes()->create([
+                    'canal' => $canal,
+                    'status' => 'pendente',
+                ]);
+            });
+
             try {
                 $responsavel->notify($notification);
+
+                $notificacoes->each->update([
+                    'status' => 'enviado',
+                    'enviado_at' => now(),
+                ]);
             } catch (Throwable $exception) {
+                $notificacoes->each->update([
+                    'status' => 'falhou',
+                ]);
+
                 report($exception);
             }
         }
