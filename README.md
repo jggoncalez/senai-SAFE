@@ -29,7 +29,7 @@ Cada etapa fica registrada com timestamp, usuário responsável e quantidade de 
 
 ### Contexto acadêmico
 
-Projeto desenvolvido como trabalho de conclusão de curso — SENAI Limeira, 2026.
+Projeto desenvolvido como trabalho — SENAI Limeira, 2026.
 
 ---
 
